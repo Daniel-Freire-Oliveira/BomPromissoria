@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promissorias</title>
+    <!-- Bootstrap CSS -->
+    <link href="/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        .btn-success {
+            background-color: green;
+            border-color: green;
+        }
+        .filters {
+            border: 1px solid #ddd;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .table thead th {
+            background-color: #007bff;
+            color: white;
+        }
+        .table td, .table th {
+            vertical-align: middle;
+        }
+        .last-update {
+            font-size: 0.75em;
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h5>Promissorias</h5>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <a href="adicionar"><button class="btn btn-primary">Adicionar</button></a>
+                <div>
+                    <a id="linkFiltroNome"><button id="buttonLinkNome" class="btn btn-light"><i class="fas fa-print"></i>Filtrar-Nome</button></a>
+                    <a id="linkfiltro"><button class="btn btn-light" id="filtro">Filtrar -Cpf</button></a>
+                    <input type="search" class="form-control d-inline-block" style="width: auto;" id="buscafiltro" placeholder="Buscar">
+                </div>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Data de emissão</th>
+                        <th>Nome</th>
+                        <th>Valor</th>
+                        <th>Vencimento</th>
+                        <th>Ver</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% const limitePorPagina = 10; %> <!-- Definindo o limite de itens por página -->
+                    <% const inicio = (paginaAtual - 1) * limitePorPagina; %> <!-- Cálculo do índice de início para a página atual -->
+                    <% const fim = Math.min(inicio + limitePorPagina, obj.length); %> <!-- Cálculo do índice de fim para a página atual -->
+                    <% for (let i = inicio; i < fim; i++) { %> <!-- Loop limitado ao limite de itens por página e ao tamanho do objeto -->
+                    <tr>
+                        <td>
+                            <%= obj[i].emissao %>
+                            <br>
+                            <small class="last-update">Última atualização: <%= obj[i].dataAt %></small>
+                        </td>
+                        <td><%= obj[i].nome %></td> <!-- Usando obj[i].nome -->
+                        <td><%= obj[i].valor %></td>
+                        <td><%= obj[i].vencimento %></td>
+                        <td><a href="/info/<%= obj[i].id%>" ><button class="btn btn-sm btn-outline-secondary">Informações</button></a></td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" id="butao" data-vencimento="<%=obj[i].vencimento%>">aguardando<i class="fas fa-user-friends"></i></button>
+                        </td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item <%= paginaAtual === 1 ? 'disabled' : '' %>">
+                        <a class="page-link" href="?pagina=<%= paginaAtual - 1 %>" tabindex="-1">Anterior</a>
+                    </li>
+
+                    <% for (let i = 1; i <= 3; i++) { %>
+                        <li class="page-item <%= paginaAtual === i ? 'active' : '' %>">
+                            <a class="page-link" href="?pagina=<%= i %>"><%= i %></a>
+                        </li>
+                    <% } %>
+                    <%if(paginaAtual > 3){%>
+                        <li class="page-item">
+                            <button type="button" class="btn btn-link"><%=paginaAtual%></button>
+
+                        </li>
+                    <%}%>
+                    <li class="page-item <%= paginaAtual === totalPages ? 'disabled' : '' %>">
+
+                        <a class="page-link" href="?pagina=<%= paginaAtual + 1 %>">Próximo</a>
+                    </li>
+
+                </ul>
+            </nav>
+        </div>
+        <div class="col-md-4">
+            <div class="filters">
+                <h5 class="mb-3">Filtro Avançado</h5>
+
+                <div class="form-group">
+                    <label>Vencidos</label>
+                    <div class="form-check">
+                        <input class="form-check-input" value="vencido" type="checkbox" id="alunoSim">
+                        <label class="form-check-label" for="alunoSim">Todos</label>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <a href="#" id="filterLink"><button id="buttonLink" class="btn btn-success flex-grow-1 me-2">Filtrar</button></a>
+                    <button class="btn btn-danger flex-grow-1" id="limp">Limpar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var linkFiltroNome = document.getElementById('linkFiltroNome')
+    var buttonLinkNome = document.getElementById('buttonLinkNome')
+    buttonLinkNome.addEventListener("click",(err)=>{
+        linkFiltroNome.href = "/filtroNome/"+buscafiltro.value.replace(/[^a-z\s]+/g, '');
+    })
+    var lim = document.getElementById("limp")
+    var alunoSim = document.getElementById("alunoSim")
+    var filterLink = document.getElementById('filterLink')
+    var buttonLink = document.getElementById('buttonLink')
+    buttonLink.addEventListener('click',(e)=>{
+        if(alunoSim.checked){
+            filterLink.href = "/vencidos"
+        }
+    })
+    limp.addEventListener('click',(e)=>{
+        alunoSim.checked = false
+    })
+
+    function compareDates(date) {
+        let parts = date.split('/');
+        let today = new Date();
+
+        date = new Date(parts[2], parts[1] - 1, parts[0]);
+
+        return date >= today ? true : false;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const buttons = document.querySelectorAll('[data-vencimento]');
+        
+        buttons.forEach(button => {
+            const dataVencimento = button.getAttribute('data-vencimento');
+            result(dataVencimento, button);
+        });
+    });
+
+    function result(data, button) {
+        const isVencido = !compareDates(data);
+        if (isVencido) {
+            button.textContent = "Vencido";
+            button.classList.remove("btn-outline-secondary", "btn-sm");
+            button.classList.add("btn-danger");
+        } else {
+            button.textContent = "Não Vencido";
+            button.classList.remove("btn-outline-secondary", "btn-sm");
+            button.classList.add("btn-success");
+        }
+    }
+
+    var filter = document.getElementById('filtro')
+    var linkfiltro = document.getElementById('linkfiltro')
+    var buscafiltro = document.getElementById('buscafiltro')
+
+    filter.addEventListener('click',(e)=>{
+        var text = buscafiltro.value.replace(/\D/g, '');
+        linkfiltro.href = "/filtro/" + text;
+    })
+</script>
+
+</body>
+</html>

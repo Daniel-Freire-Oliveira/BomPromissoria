@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro Social</title>
+    <!-- Link do CSS do Bootstrap -->
+    <link href="/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #dfe6e9;
+            font-family: Arial, sans-serif;
+        }
+        .form-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        .form-header {
+            background-color: #1a528a;
+            color: #ffffff;
+            padding: 15px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            text-align: center;
+        }
+        .form-title {
+            margin: 0;
+        }
+        .form-subtitle {
+            background-color: #34495e;
+            color: #ffffff;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="form-container">
+        <div class="form-header">
+            <h2 class="form-title">Cadastro social</h2>
+        </div>
+        <form method="post" action="/add">
+            <div class="form-subtitle">Preencha as informações</div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="nome">Nome</label>
+                    <input type="text" class="form-control" id="nome" name="nm" autocomplete="off" placeholder="Nome completo" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="cpf">CPF</label>
+                    <input type="text" class="form-control" autocomplete="off" name="cpf" id="cpf" placeholder="000.000.000-00" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="numero">Endereço</label>
+                    <input type="text" class="form-control" autocomplete="off" name="end" id="numero" placeholder="Rua prefeito chagas cardoso" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="complemento">Bairro</label>
+                    <input type="text" class="form-control" name="bair" autocomplete="off" id="complemento" placeholder="Bairro" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="data-emissao">Data de Emissão</label>
+                    <input type="date" class="form-control" name="emiss" id="data-emissao" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="Valor">Valor</label>
+                    <input type="text" name="val" class="form-control" autocomplete="off" id="cidade" placeholder="0,00" required>
+                </div>
+                <div class="form-group col-md-12">
+                    <label for="Descricao">Descrição</label>
+                    <input type="text" name="desc" class="form-control" autocomplete="off" id="cidade" placeholder="1 Saco de cimento/ 2 latas de tinta">
+                </div>
+                <div class="form-group col-md-12">
+                    <label for="Apelido">Apelido</label>
+                    <input type="text" name="apel" class="form-control" autocomplete="off" id="cidade" placeholder="Apelido">
+                </div>
+            </div>
+            <button type="submit" id="btn-1" class="btn btn-primary">Cadastrar</button>
+            <a href="javascript:history.back()"><button  class="btn  btn-outline-secondary">Voltar</button></a>
+        </form>
+    </div>
+</div>
+<script>
+    var btn = document.getElementById("btn-1")
+    var input = document.getElementById('cpf')
+    btn.addEventListener('click',(e)=>{
+        var text = input.value.replace(/\D/g, '');
+        input.value = text
+    })
+</script>
+
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="/bootstrap.min.css" rel="stylesheet">
+<title>Resultados da Busca</title>
+<style>
+    .navbar-custom {
+        background-color: #007bff;
+    }
+    .result-item {
+        border: 1px solid #ccc;
+        padding: 20px;
+        margin: 10px 0;
+        box-sizing: border-box;
+        width: 50%;
+        border-radius: 8px; /* Bordas arredondadas */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para um efeito mais bonito */
+        background-color: #fff; /* Fundo branco */
+        display: flex; /* Usar flexbox para alinhar itens */
+        align-items: center; /* Alinhar itens verticalmente */
+    }
+    .result-content {
+        flex-grow: 1; /* Permitir que o conteúdo cresça e preencha o espaço disponível */
+        margin-right: 10px; /* Espaço entre o conteúdo e o botão */
+    }
+    .container-results {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px; /* Margem superior para afastar da navbar */
+    }
+    .result-item h5 {
+        margin-bottom: 10px; /* Espaço entre o título e o texto */
+        color: #007bff; /* Cor do texto do título */
+    }
+    .result-item p {
+        margin-bottom: 5px; /* Espaço entre os parágrafos */
+        color: #333; /* Cor do texto */
+    }
+</style>
+</head>
+<body>
+<nav class="navbar navbar-custom">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+        <a href="javascript:history.back()" class="btn btn-outline-light">Voltar</a>
+        <a href="/exportar/%>"><button class="btn btn-outline-light"><i class="fas fa-print"></i>exportar</button></a>
+        <span class="navbar-brand mb-0 h1 text-white mx-auto">Resultados de "Vencidos"</span>
+    </div>
+</nav>
+
+<div class="container mt-10 container-results">
+    <% obj.forEach(function(re) { %>
+        <div class="result-item">
+            <div class="result-content">
+                <h5><%= re.nome %></h5>
+                <p><strong>CPF:</strong> <%= re.cpf %></p>
+                <p><strong>Emissão:</strong> <%= re.emissao %></p>
+                <p><strong>Apelido:</strong> <%= re.apelido %></p>
+                <p><strong>Valor:</strong> <%= re.valor %></p>
+            </div>
+            <a href="/info/<%=re.id%>"><button class="btn btn-primary">Informações</button></a> <!-- Botão na frente do conteúdo -->
+            <button class="btn btn-secundary" data-vencimento="<%=re.vencimento%>">Informações</button>
+        </div>
+    <% }); %>
+</div>
+<script>
+        function compareDates(date) {
+        let parts = date.split('/');
+        let today = new Date();
+
+        date = new Date(parts[2], parts[1] - 1, parts[0]);
+
+        return date >= today ? true : false;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const buttons = document.querySelectorAll('[data-vencimento]');
+        
+        buttons.forEach(button => {
+            const dataVencimento = button.getAttribute('data-vencimento');
+            result(dataVencimento, button);
+        });
+    });
+
+    function result(data, button) {
+        const isVencido = !compareDates(data);
+        if (isVencido) {
+            button.textContent = "Vencido";
+            button.classList.remove("btn-outline-secondary");
+            button.classList.add("btn-warning");
+        } else {
+            button.textContent = "Não Vencido";
+            button.classList.remove("btn-outline-secondary");
+            button.classList.add("btn-success");
+        }
+    }
+
+</script>
+</body>
+</html>

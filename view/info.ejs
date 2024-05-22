@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="/bootstrap.min.css" rel="stylesheet">
+<title>Card Centralizado</title>
+<style>
+    .card-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .card {
+        width: 300px;
+        border: 1px solid #ccc;
+    }
+</style>
+</head>
+<body>
+    <div class="card-container">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Informações do Cliente</h5>
+                <p class="card-text">Nome: <%= obj.nome%> </p>
+                <p class="card-text">Valor: R$ <%= obj.valor%> </p>
+                <p class="card-text">Vencimento: <%= obj.vencimento%> </p>
+                <p class="card-text">Cpf: <%= obj.cpf%> </p>
+                <p class="card-text">Informações: <%= obj.descricao%> </p>
+                <div class="d-flex justify-content-between">
+                    <a href="/delete/<%=id%>" class="btn btn-danger btn-sm">Apagar</a>
+                    <a href="/update/<%= id%>" class="btn btn-outline-primary btn-sm">Atualizar</a>
+                    <a href="javascript:history.back()" class="btn btn-outline-secondary btn-sm">Voltar</a>
+                    <button data-vencimento="<%=obj.vencimento%>" class="btn btn-outline-secondary btn-sm"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<script>
+        function compareDates(date) {
+        let parts = date.split('/');
+        let today = new Date();
+
+        date = new Date(parts[2], parts[1] - 1, parts[0]);
+
+        return date >= today ? true : false;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const buttons = document.querySelectorAll('[data-vencimento]');
+        
+        buttons.forEach(button => {
+            const dataVencimento = button.getAttribute('data-vencimento');
+            result(dataVencimento, button);
+        });
+    });
+
+    function result(data, button) {
+        const isVencido = !compareDates(data);
+        if (isVencido) {
+            button.textContent = "Vencido";
+            button.classList.remove("btn-outline-secondary");
+            button.classList.add("btn-warning");
+        } else {
+            button.textContent = "Não Vencido";
+            button.classList.remove("btn-outline-secondary");
+            button.classList.add("btn-success");
+        }
+    }
+
+</script>
+</body>
+</html>
