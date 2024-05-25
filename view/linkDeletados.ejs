@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="/bootstrap.min.css" rel="stylesheet">
+<title>Página de Links</title>
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .container {
+        margin-top: 50px;
+    }
+    .card {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .card-header {
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 10px 10px 0 0;
+    }
+    .card-body {
+        padding: 20px;
+    }
+    .list-group-item {
+        border: none;
+        border-bottom: 1px solid #ddd;
+    }
+    .list-group-item:last-child {
+        border-bottom: none;
+    }
+    .list-group-item:hover {
+        background-color: #f8f9fa;
+    }
+</style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" title="Vai para a página inicial" href="/">Bom Preço</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" title="Sai da sessão Atual" href="/logout">Logout <span class="sr-only"></span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" title="Vai para a página pagos" href="/pagos">Pagos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" title="Vai para a página link de Deletados" href="/linkDeletados">Deletados</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" title="Vai para a página Serasa" href="/serasa">Serasa</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="mb-0">Página de Links</h3>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <a href="/deletados" class="list-group-item list-group-item-action">Deletados não pagos</a>
+                    <a href="/pagos/pagosDeletados" class="list-group-item list-group-item-action">Deletados pagos</a>
+                    <a href="/serasa/deletados" class="list-group-item list-group-item-action">Deletados Serasa</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -16,6 +16,18 @@ function stringSimilarity(str1, str2) {
     return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength);
 }
 
+function getDataHoraAtual() {
+    const dataAtual = new Date();
+    const dia = dataAtual.getDate().toString().padStart(2, '0'); // Dia com zero à esquerda se necessário
+    const mes = (dataAtual.getMonth() + 1).toString().padStart(2, '0'); // Mês com zero à esquerda se necessário (lembrando que janeiro é 0)
+    const ano = dataAtual.getFullYear();
+    const hora = dataAtual.getHours().toString().padStart(2, '0'); // Hora com zero à esquerda se necessário
+    const minuto = dataAtual.getMinutes().toString().padStart(2, '0'); // Minuto com zero à esquerda se necessário
+
+    return `${dia}/${mes}/${ano} ${hora}:${minuto}`;
+}
+
+
 function editDistance(str1, str2) {
     const costs = [];
     for (let i = 0; i <= str1.length; i++) {
@@ -120,7 +132,7 @@ function add(cpf, pago, dados, file, atualizar, nomeArquiNovo) {
                 console.error('Erro ao criar arquivo:', error);
             }
         } else {
-            if (file > 1000) {  // Condição de parada para evitar recursão infinita
+            if (file > 10000) {  // Condição de parada para evitar recursão infinita
                 console.error('Número máximo de tentativas de criação de arquivo alcançado');
                 return;
             }
@@ -284,18 +296,52 @@ function criarNomeArquivo() {
     const nomeArquivo = `${ano}${mes}${dia}_${horas}${minutos}${segundos}.xlsx`;
     return nomeArquivo;
 }
-function rmv(name){
-    fs.unlink(name, (error) => {
+function rmv(cpf, pago, file, nomeArq, obj,destino,origem){
+    const nomeArqui = `${cpf}_${pago}_${file}.json`;
+    const arquivoAtual = `./${origem}/${nomeArq}.json`;
+    const novoDiretorio = `./${destino}/`;
+
+    if (fs.existsSync(novoDiretorio + nomeArqui)) {
+        rmv(cpf, pago, file + 1, nomeArq, obj,destino,origem);
+    } else {
+        // Modificando a linha desejada ("nomeArq")
+        obj.nomeArq = `${cpf}_${pago}_${file}`;
+        obj.dataDel = new Date().toLocaleDateString('pt-BR');
+        // Convertendo o objeto JavaScript de volta para JSON
+        const novoConteudo = JSON.stringify(obj, null, 2);
+
+        // Salvando o arquivo modificado no novo diretório
+        fs.writeFile(novoDiretorio + nomeArqui, novoConteudo, (err) => {
+            if (err) {
+                console.error('Erro ao salvar o arquivo modificado:', err);
+                return;
+            }
+
+            console.log('Arquivo movido e incluido no serasa:', novoDiretorio);
+            // Removendo o arquivo original após salvar no novo diretório
+            fs.unlink(arquivoAtual, (error) => {
+                if (error) {
+                    console.log('Erro ao remover o arquivo:', error);
+                } else {
+                    console.log('Arquivo removido com sucesso!');
+                }
+            });
+        });
+    }
+
+}
+
+function rmvPerm(ArquivoPath){
+    fs.unlink(ArquivoPath, (error) => {
         if (error) {
             console.log('Erro ao remover o arquivo:', error);
         } else {
             console.log('Arquivo removido com sucesso!');
         }
     });
-
 }
 
-function exportar(obj){
+function exportar(obj,caminho){
     const worksheet = xlsx.utils.json_to_sheet(obj);
 
     // Cria um novo livro de trabalho
@@ -303,8 +349,143 @@ function exportar(obj){
     xlsx.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
 
     // Escreve o arquivo Excel
-    xlsx.writeFile(workbook, `./export/${criarNomeArquivo()}`);
+    xlsx.writeFile(workbook, `./export/${caminho}/${criarNomeArquivo()}`);
 
     console.log('Arquivo Excel criado com sucesso.');
 }
-module.exports = {add,rmv,read,readAll,find,update,exportar,findByContent}
+
+function move(cpf, pago, file, nomeArq, obj) {
+    const nomeArqui = `${cpf}_${pago}_${file}.json`;
+    const arquivoAtual = `./dados/${nomeArq}.json`;
+    const novoDiretorio = './pagos/';
+
+    if (fs.existsSync(novoDiretorio + nomeArqui)) {
+        move(cpf, pago, file + 1, nomeArq, obj);
+    } else {
+        // Modificando a linha desejada ("nomeArq")
+        obj.nomeArq = `${cpf}_${pago}_${file}`;
+        obj.dataInclusaoPagamento = new Date().toLocaleDateString('pt-BR');
+        // Convertendo o objeto JavaScript de volta para JSON
+        const novoConteudo = JSON.stringify(obj, null, 2);
+
+        // Salvando o arquivo modificado no novo diretório
+        fs.writeFile(novoDiretorio + nomeArqui, novoConteudo, (err) => {
+            if (err) {
+                console.error('Erro ao salvar o arquivo modificado:', err);
+                return;
+            }
+
+            console.log('Arquivo movido e modificado com sucesso para o novo diretório:', novoDiretorio);
+            // Removendo o arquivo original após salvar no novo diretório
+            fs.unlink(arquivoAtual, (error) => {
+                if (error) {
+                    console.log('Erro ao remover o arquivo:', error);
+                } else {
+                    console.log('Arquivo removido com sucesso!');
+                }
+            });
+        });
+    }
+}
+function moveSerasa(cpf, pago, file, nomeArq, obj,destino,origem) {
+    const nomeArqui = `${cpf}_${pago}_${file}.json`;
+    const arquivoAtual = `./${origem}/${nomeArq}.json`;
+    const novoDiretorio = `./${destino}/`;
+
+    if (fs.existsSync(novoDiretorio + nomeArqui)) {
+        moveSerasa(cpf, pago, file + 1, nomeArq, obj,destino,origem);
+    } else {
+        // Modificando a linha desejada ("nomeArq")
+        obj.nomeArq = `${cpf}_${pago}_${file}`;
+        obj.inclusaoSerasa = new Date().toLocaleDateString('pt-BR');
+
+        // Convertendo o objeto JavaScript de volta para JSON
+        const novoConteudo = JSON.stringify(obj, null, 2);
+
+        // Salvando o arquivo modificado no novo diretório
+        fs.writeFile(novoDiretorio + nomeArqui, novoConteudo, (err) => {
+            if (err) {
+                console.error('Erro ao salvar o arquivo modificado:', err);
+                return;
+            }
+
+            console.log('Arquivo movido e incluido no serasa:', novoDiretorio);
+            // Removendo o arquivo original após salvar no novo diretório
+            fs.unlink(arquivoAtual, (error) => {
+                if (error) {
+                    console.log('Erro ao remover o arquivo:', error);
+                } else {
+                    console.log('Arquivo removido com sucesso!');
+                }
+            });
+        });
+    }
+}
+function removeSerasa(cpf, pago, file, nomeArq, obj,destino,origem) {
+    const nomeArqui = `${cpf}_${pago}_${file}.json`;
+    const arquivoAtual = `./${origem}/${nomeArq}.json`;
+    const novoDiretorio = `./${destino}/`;
+
+    if (fs.existsSync(novoDiretorio + nomeArqui)) {
+        moveSerasa(cpf, pago, file + 1, nomeArq, obj,destino,origem);
+    } else {
+        // Modificando a linha desejada ("nomeArq")
+        obj.nomeArq = `${cpf}_${pago}_${file}`;
+        obj.dataDelecaoSerasa = new Date().toLocaleDateString('pt-BR');
+
+        // Convertendo o objeto JavaScript de volta para JSON
+        const novoConteudo = JSON.stringify(obj, null, 2);
+
+        // Salvando o arquivo modificado no novo diretório
+        fs.writeFile(novoDiretorio + nomeArqui, novoConteudo, (err) => {
+            if (err) {
+                console.error('Erro ao salvar o arquivo modificado:', err);
+                return;
+            }
+
+            console.log('Arquivo movido e incluido no serasa:', novoDiretorio);
+            // Removendo o arquivo original após salvar no novo diretório
+            fs.unlink(arquivoAtual, (error) => {
+                if (error) {
+                    console.log('Erro ao remover o arquivo:', error);
+                } else {
+                    console.log('Arquivo removido com sucesso!');
+                }
+            });
+        });
+    }
+}
+
+function recuperaArq(cpf, pago, file, nomeArq, obj,destino,origem){
+    const nomeArqui = `${cpf}_${pago}_${file}.json`;
+    const arquivoAtual = `./${origem}/${nomeArq}.json`;
+    const novoDiretorio = `./${destino}/`;
+
+    if (fs.existsSync(novoDiretorio + nomeArqui)) {
+        recuperaArq(cpf, pago, file + 1, nomeArq, obj,destino,origem);
+    } else {
+        // Modificando a linha desejada ("nomeArq")
+        obj.nomeArq = `${cpf}_${pago}_${file}`;
+        // Convertendo o objeto JavaScript de volta para JSON
+        const novoConteudo = JSON.stringify(obj, null, 2);
+
+        // Salvando o arquivo modificado no novo diretório
+        fs.writeFile(novoDiretorio + nomeArqui, novoConteudo, (err) => {
+            if (err) {
+                console.error('Erro ao salvar o arquivo modificado:', err);
+                return;
+            }
+
+            console.log('Arquivo movido e incluido no serasa:', novoDiretorio);
+            // Removendo o arquivo original após salvar no novo diretório
+            fs.unlink(arquivoAtual, (error) => {
+                if (error) {
+                    console.log('Erro ao remover o arquivo:', error);
+                } else {
+                    console.log('Arquivo removido com sucesso!');
+                }
+            });
+        });
+    }
+}
+module.exports = {add,rmv,read,readAll,find,update,exportar,findByContent,move,rmvPerm,moveSerasa,recuperaArq,getDataHoraAtual,removeSerasa}

@@ -14,7 +14,7 @@
     }
     .card {
         width: 300px;
-        border: 1px solid #ccc;
+        border: 1px solid #b1b370;
     }
 </style>
 </head>
@@ -22,7 +22,7 @@
     <div class="card-container">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Informações do Cliente</h5>
+                <h5 class="card-title">Informações do Cliente no Serasa</h5>
                 <p class="card-text">Nome: <%= obj.nome%> </p>
                 <p class="card-text">Valor: R$ <%= obj.valor%> </p>
                 <p class="card-text">Vencimento: <%= obj.vencimento%> </p>
@@ -30,17 +30,15 @@
                 <p class="card-text">Informações: <%= obj.descricao%> </p>
                 <p class="card-text">Apelido: <%= obj.apelido%> </p>
                 <div class="d-flex justify-content-between">
-                    <a href="/delete/<%=id%>" title="Este usuário vai para /deletados" class="btn btn-danger btn-sm">Apagar</a>
-                    <a href="/update/<%= id%>" class="btn btn-outline-primary btn-sm" title="Opção de atualizar usuário">Atualizar</a>
+                    <a id="retiradaDoSerasa" href="/serasa/recuperar/<%=id%>" title="Esta opção tira o '<%=obj.nome%>' do Serasa" class="btn btn-outline-danger btn-sm">Recuperar do serasa - tirar do serasa</a>
                     <a href="javascript:history.back()" class="btn btn-outline-secondary btn-sm">Voltar</a>
-                    <a id="linkVencimento"><button data-vencimento="<%=obj.vencimento%>" title="Usuário vencido: a opção de incluir no serasa é ativada" class="btn btn-outline-secondary btn-sm"></button></a>
+                    <button data-vencimento="<%=obj.vencimento%>" title="Vencido às <%=obj.vencimento%>" id="vencimento" class="btn btn-outline-secondary btn-sm"></button>
                 </div>
             </div>
         </div>
     </div>
     
 <script>
-    var linkVencimento = document.getElementById("linkVencimento")
         function compareDates(date) {
         let parts = date.split('/');
         let today = new Date();
@@ -62,16 +60,23 @@
     function result(data, button) {
         const isVencido = !compareDates(data);
         if (isVencido) {
-            button.textContent = "Vencido - Incluir no Serasa";
+            button.textContent = "Vencido";
             button.classList.remove("btn-outline-secondary");
-            button.classList.add("btn-warning", "btn-sm");
-            linkVencimento.href = "/serasa/incluir/<%=obj.id%>"
+            button.classList.add("btn-warning");
         } else {
             button.textContent = "Não Vencido";
             button.classList.remove("btn-outline-secondary");
-            button.classList.add("btn-success", "btn-sm");
+            button.classList.add("btn-success");
         }
     }
+    var vencimento = document.getElementById("vencimento")
+    vencimento.addEventListener("click",(err)=>{
+        window.alert("Vencido às <%=obj.vencimento%> \n e incluido no serasa às <%=obj.inclusaoSerasa%>")
+    })
+    var retiradaDoSerasa = document.getElementById("retiradaDoSerasa")
+    retiradaDoSerasa.addEventListener("click",(err)=>{
+        window.alert("<%=obj.nome%> retornou a pagina inicial!")
+    })
 
 </script>
 </body>

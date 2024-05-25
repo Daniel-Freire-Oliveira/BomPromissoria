@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="/bootstrap.min.css" rel="stylesheet">
+<title>Card Centralizado</title>
+<style>
+    .card-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .card {
+        width: 300px;
+        border: 1px solid #ccc;
+        background-color: #f8d7da; /* Cor de fundo para o tom de deletado */
+    }
+    .card-header {
+        background-color: #dc3545; /* Cor de fundo do cabeçalho */
+        color: white;
+        padding: 10px;
+        text-align: center;
+    }
+    .card-body {
+        padding: 20px;
+    }
+</style>
+</head>
+<body>
+    <div class="card-container">
+        <div class="card">
+            <div class="card-header">
+                Informações do Cliente
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Nome: <%= obj.nome%> </h5>
+                <p class="card-text">Valor: R$ <%= obj.valor%> </p>
+                <p class="card-text">Vencimento: <%= obj.vencimento%> </p>
+                <p class="card-text">Cpf: <%= obj.cpf%> </p>
+                <p class="card-text">Informações: <%= obj.descricao%> </p>
+                <div class="d-flex justify-content-between">
+                    <a href="/deletados/permanente/<%=obj.id%>" class="btn btn-danger btn-sm">Apagar permanente</a>
+                    <a href="javascript:history.back()" class="btn btn-outline-secondary btn-sm">Voltar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

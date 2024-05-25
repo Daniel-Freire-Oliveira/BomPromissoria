@@ -7,26 +7,30 @@
     <!-- Bootstrap CSS -->
     <link href="/bootstrap.min.css" rel="stylesheet">
     <style>
+        body {
+            font-family: 'Arial', sans-serif;
+        }
         .header {
-            background-color: #007bff;
+            background-color: #343a40;
             color: white;
-            padding: 10px;
+            padding: 20px;
             text-align: center;
-            font-size: 20px;
+            font-size: 24px;
             margin-bottom: 20px;
         }
         .btn-success {
-            background-color: green;
-            border-color: green;
+            background-color: #28a745;
+            border-color: #28a745;
         }
         .filters {
             border: 1px solid #ddd;
             padding: 15px;
             background-color: #f8f9fa;
             border-radius: 5px;
+            margin-bottom: 20px;
         }
         .table thead th {
-            background-color: #007bff;
+            background-color: #343a40;
             color: white;
         }
         .table td, .table th {
@@ -36,50 +40,61 @@
             font-size: 0.75em;
             color: gray;
         }
+        .navbar-brand {
+            font-size: 1.5em;
+        }
+        .pagination {
+            justify-content: center;
+        }
+        .form-control {
+            width: auto;
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-        <div class="container">
-            <a class="navbar-brand" title="Vai para a página inicial" href="/">Bom Preço</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" title="Sai da sessão Atual" href="/logout">Logout <span class="sr-only"></span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" title="Vai para a página pagos" href="/pagos">Pagos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" title="Vai para a página link de Deletados" href="/linkDeletados">Deletados</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" title="Vai para a página Serasa" href="/serasa">Serasa</a>
-                    </li>
-                </ul>
-            </div>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container">
+        <a class="navbar-brand" title="Vai para a página inicial" href="/">Bom Preço</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" title="Sai da sessão Atual" href="/logout">Logout <span class="sr-only"></span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" title="Vai para a página pagos" href="/pagos">Pagos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" title="Vai para a página link de Deletados" href="/linkDeletados">Deletados</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" title="Vai para a página Serasa" href="/serasa">Serasa</a>
+                </li>
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
 <div class="container">
     <div class="header">
-        <h5>Promissorias</h5>
+        Promissórias - Pagas
     </div>
 
     <div class="row">
         <div class="col-md-8">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <a href="adicionar"><button class="btn btn-primary">Adicionar</button></a>
+                <a href="javascript:history.back()" class="btn btn-primary">Voltar</a>
                 <div>
-                    <a id="linkFiltroNome"><button id="buttonLinkNome" class="btn btn-light"><i class="fas fa-print"></i>Filtrar-Nome</button></a>
-                    <a id="linkfiltro"><button class="btn btn-light" id="filtro">Filtrar -Cpf</button></a>
-                    <input type="search" class="form-control d-inline-block" style="width: auto;" id="buscafiltro" placeholder="Buscar">
+                    <a id="linkFiltroNome"><button id="buttonLinkNome" class="btn btn-light"><i class="fas fa-print"></i> Filtrar Nome</button></a>
+                    <a id="linkfiltro"><button class="btn btn-light" id="filtro">Filtrar CPF</button></a>
+                    <input type="search" class="form-control" id="buscafiltro" placeholder="Buscar">
                 </div>
             </div>
 
-            <table class="table">
+            <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>Data de emissão</th>
@@ -92,41 +107,40 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% const limitePorPagina = 10; %> <!-- Definindo o limite de itens por página -->
-                    <% const inicio = (paginaAtual - 1) * limitePorPagina; %> <!-- Cálculo do índice de início para a página atual -->
-                    <% const fim = Math.min(inicio + limitePorPagina, obj.length); %> <!-- Cálculo do índice de fim para a página atual -->
-                    <% for (let i = inicio; i < fim; i++) { %> <!-- Loop limitado ao limite de itens por página e ao tamanho do objeto -->
+                    <% const limitePorPagina = 10; %>
+                    <% const inicio = (paginaAtual - 1) * limitePorPagina; %>
+                    <% const fim = Math.min(inicio + limitePorPagina, obj.length); %>
+                    <% for (let i = inicio; i < fim; i++) { %>
                     <tr>
                         <td>
                             <%= obj[i].emissao %>
                             <br>
                             <small class="last-update">Última atualização: <%= obj[i].dataAt %></small>
                         </td>
-                        <td><%= obj[i].nome %></td> <!-- Usando obj[i].nome -->
+                        <td><%= obj[i].nome %></td>
                         <td><%= obj[i].valor %></td>
                         <td><%= obj[i].vencimento %></td>
-                        <td><a href="/info/<%= obj[i].id%>" ><button class="btn btn-sm btn-outline-secondary">Informações</button></a></td>
+                        <td><a href="/pagos/info/<%= obj[i].id%>" class="btn btn-sm btn-outline-secondary">Informações</a></td>
                         <td>
                             <% if (obj[i].pago === "true") { %>
                                 <a><button class="btn btn-sm btn-outline-success">Pago</button></a>
                             <% } else { %>
-                                <a href="#"><button class="btn btn-sm btn-outline-danger">Nao</button></a>
+                                <a><button class="btn btn-sm btn-outline-danger">Não</button></a>
                             <% } %>
                         </td>
                         <td>
-                            <a id="linkBotaoVencimento"><button class="btn btn-primary btn-sm" id="butao" data-vencimento="<%= obj[i].vencimento %>">aguardando<i class="fas fa-user-friends"></i></button></a>
+                            <button class="btn btn-sm btn-primary" id="butao" data-vencimento="<%= obj[i].vencimento %>">Aguardando <i class="fas fa-user-friends"></i></button>
                         </td>
                     </tr>
                     <% } %>
                 </tbody>
             </table>
 
-            <nav aria-label="Page navigation example">
+            <nav aria-label="Page navigation">
                 <ul class="pagination">
                     <li class="page-item <%= paginaAtual === 1 ? 'disabled' : '' %>">
                         <a class="page-link" href="?pagina=<%= paginaAtual - 1 %>" tabindex="-1">Anterior</a>
                     </li>
-
                     <% for (let i = 1; i <= 3; i++) { %>
                         <li class="page-item <%= paginaAtual === i ? 'active' : '' %>">
                             <a class="page-link" href="?pagina=<%= i %>"><%= i %></a>
@@ -146,7 +160,6 @@
         <div class="col-md-4">
             <div class="filters">
                 <h5 class="mb-3">Filtro Avançado</h5>
-
                 <div class="form-group">
                     <label>Vencidos</label>
                     <div class="form-check">
@@ -154,9 +167,8 @@
                         <label class="form-check-label" for="alunoSim">Todos</label>
                     </div>
                 </div>
-
                 <div class="d-flex justify-content-between align-items-center">
-                    <a href="#" id="filterLink"><button id="buttonLink" class="btn btn-success flex-grow-1 me-2">Filtrar</button></a>
+                    <a href="#" id="filterLink"><button id="buttonLink" class="btn btn-success flex-grow-1 mr-2">Filtrar</button></a>
                     <button class="btn btn-danger flex-grow-1" id="limp">Limpar</button>
                 </div>
             </div>
@@ -165,36 +177,35 @@
 </div>
 
 <script>
-    var linkFiltroNome = document.getElementById('linkFiltroNome')
-    var buttonLinkNome = document.getElementById('buttonLinkNome')
-    buttonLinkNome.addEventListener("click", (err) => {
-        linkFiltroNome.href = "/filtroNome/" + buscafiltro.value.replace(/[^a-z\s]+/g, '');
+    var linkFiltroNome = document.getElementById('linkFiltroNome');
+    var buttonLinkNome = document.getElementById('buttonLinkNome');
+    buttonLinkNome.addEventListener("click", () => {
+        linkFiltroNome.href = "/pagos/filtroNome/" + buscafiltro.value.replace(/[^a-z\s]+/g, '');
     });
+    
     var lim = document.getElementById("limp");
     var alunoSim = document.getElementById("alunoSim");
     var filterLink = document.getElementById('filterLink');
     var buttonLink = document.getElementById('buttonLink');
-    buttonLink.addEventListener('click', (e) => {
+    buttonLink.addEventListener('click', () => {
         if (alunoSim.checked) {
-            filterLink.href = "/vencidos";
+            filterLink.href = "/pagos/vencidos";
         }
     });
-    limp.addEventListener('click', (e) => {
+    
+    lim.addEventListener('click', () => {
         alunoSim.checked = false;
     });
 
     function compareDates(date) {
         let parts = date.split('/');
         let today = new Date();
-
         date = new Date(parts[2], parts[1] - 1, parts[0]);
-
-        return date >= today ? true : false;
+        return date >= today;
     }
 
     document.addEventListener('DOMContentLoaded', function() {
         const buttons = document.querySelectorAll('[data-vencimento]');
-        
         buttons.forEach(button => {
             const dataVencimento = button.getAttribute('data-vencimento');
             result(dataVencimento, button);
@@ -205,11 +216,11 @@
         const isVencido = !compareDates(data);
         if (isVencido) {
             button.textContent = "Vencido";
-            button.classList.remove("btn-outline-secondary", "btn-sm");
-            button.classList.add("btn-warning");
+            button.classList.remove("btn-primary");
+            button.classList.add("btn-danger");
         } else {
             button.textContent = "Não Vencido";
-            button.classList.remove("btn-outline-secondary", "btn-sm");
+            button.classList.remove("btn-primary");
             button.classList.add("btn-success");
         }
     }
@@ -218,12 +229,10 @@
     var linkfiltro = document.getElementById('linkfiltro');
     var buscafiltro = document.getElementById('buscafiltro');
 
-    filter.addEventListener('click', (e) => {
+    filter.addEventListener('click', () => {
         var text = buscafiltro.value.replace(/\D/g, '');
-        linkfiltro.href = "/filtro/" + text;
+        linkfiltro.href = "/pagos/filtro/" + text;
     });
 </script>
-
 </body>
 </html>
-

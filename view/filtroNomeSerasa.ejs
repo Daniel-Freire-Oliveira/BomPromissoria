@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="/bootstrap.min.css" rel="stylesheet">
-<title>Resultados da Busca</title>
+<title>Resultados da Busca - Serasa</title>
 <style>
     .navbar-custom {
-        background-color: #007bff;
+        background-color: #ffd000;
     }
     .result-item {
         border: 1px solid #ccc;
@@ -33,7 +33,7 @@
     }
     .result-item h5 {
         margin-bottom: 10px; /* Espaço entre o título e o texto */
-        color: #007bff; /* Cor do texto do título */
+        color: hsl(0, 0%, 0%); /* Cor do texto do título */
     }
     .result-item p {
         margin-bottom: 5px; /* Espaço entre os parágrafos */
@@ -45,32 +45,27 @@
 <nav class="navbar navbar-custom">
     <div class="container-fluid d-flex justify-content-between align-items-center">
         <a href="javascript:history.back()" class="btn btn-outline-light">Voltar</a>
-        <a id="linkExport" href="/<%=dir%>/"><button class="btn btn-outline-light"><i class="fas fa-print"></i>exportar</button></a>
-        <span class="navbar-brand mb-0 h1 text-white mx-auto">Resultados de "Vencidos"</span>
+        <span class="navbar-brand mb-0 h1 text-white mx-auto">Resultados de "<%= cpf %>"</span>
     </div>
 </nav>
 
 <div class="container mt-10 container-results">
-    <% obj.forEach(function(re) { %>
+    <% objetos.forEach(function(re) { %>
         <div class="result-item">
             <div class="result-content">
-                <h5><%= re.nome %></h5>
-                <p><strong>CPF:</strong> <%= re.cpf %></p>
-                <p><strong>Emissão:</strong> <%= re.emissao %></p>
-                <p><strong>Apelido:</strong> <%= re.apelido %></p>
-                <p><strong>Valor:</strong> <%= re.valor %></p>
+                <h5><%= re.conteudo.nome %></h5>
+                <p><strong>CPF:</strong> <%= re.conteudo.cpf %></p>
+                <p><strong>Emissão:</strong> <%= re.conteudo.emissao %></p>
+                <p><strong>Apelido:</strong> <%= re.conteudo.apelido %></p>
+                <p><strong>Valor:</strong> <%= re.conteudo.valor %></p>
             </div>
-            <a href="/info/<%=re.id%>"><button class="btn btn-primary">Informações</button></a> <!-- Botão na frente do conteúdo -->
-            <button class="btn btn-secundary" data-vencimento="<%=re.vencimento%>">Informações</button>
+            <a href="/serasa/info/<%=re.conteudo.id%>"><button class="btn btn-primary">Informações</button></a> <!-- Botão na frente do conteúdo -->
+            <button class="btn btn-secundary" data-vencimento="<%=re.conteudo.vencimento%>">Informações</button>
         </div>
     <% }); %>
 </div>
 <script>
-    var linkExport = document.getElementById("linkExport")
-    linkExport.addEventListener("click",(err)=>{
-        window.alert("Arquivo exportado para: <%=exportado%>")
-    })
-    function compareDates(date) {
+        function compareDates(date) {
         let parts = date.split('/');
         let today = new Date();
 

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<title>Pessoas no Cerasa</title>
+<style>
+    .card {
+        margin-bottom: 20px;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: box-shadow 0.3s ease;
+    }
+    .card:hover {
+        box-shadow: 0 6px 10px rgba(0,0,0,0.2);
+    }
+    .card-header {
+        background-color: #dc3545;
+        color: white;
+        padding: 10px;
+        text-align: center;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+    }
+    .card-body {
+        padding: 20px;
+    }
+    .search-bar {
+        background-color: #f8f9fa;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        padding: 10px;
+    }
+    .search-input {
+        border-radius: 8px;
+    }
+    .search-button {
+        border-radius: 8px;
+    }
+</style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-warning mb-4">
+        <div class="container">
+            <a class="navbar-brand" title="Página inicial ('/')" href="/">Bom Preço</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" title="Sair" href="/logout">Logout <span class="sr-only"></span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pagos">Pagos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" title="Link de deletados" href="/linkDeletados">Deletados</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/serasa">Serasa</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="search-bar form-inline my-2 my-lg-0 mb-4">
+                    <input id="inputSearch" class="search-input form-control mr-sm-2" type="search" placeholder="Pesquisar" aria-label="Pesquisar">
+                    <a id="linkSearch"><button id="buttonSearch" class="search-button btn btn-outline-success my-2 my-sm-0" type="submit">Pesquisar</button></a>
+                </div>
+                <%obj.forEach((re)=>{%>
+                    <div class="card">
+                        <div class="card-header">
+                            <%=re.nome%>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">CPF: <%=re.cpf%></p>
+                            <p class="card-text">Data de inclusão: <%=re.inclusaoSerasa%></p>
+                            <p class="card-text"></p>
+                            <p class="card-text">Motivo: Vencimento (<%=re.vencimento%>)</p>
+                            <a href="/serasa/remover/<%=re.id%>" class="btn btn-outline-danger btn-block">Remover do Serasa - vai para a lixeira</a>
+                            <a href="/serasa/info/<%=re.id%>" class="btn btn-outline-warning btn-block">Informações</a>
+                        </div>
+                    </div>
+                <%})%>
+            </div>
+        </div>
+    </div>
+    <script>
+        var inputSearch = document.getElementById("inputSearch")
+        var linkSearch = document.getElementById("linkSearch")
+        var buttonSearch = document.getElementById("buttonSearch")
+        buttonSearch.addEventListener("click",(err)=>{
+            linkSearch.href = "/serasa/filtroNome/"+inputSearch.value.replace(/[^a-z\s]+/g, '');
+        })
+    </script>
+</body>
+</html>

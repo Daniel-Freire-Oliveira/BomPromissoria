@@ -28,19 +28,16 @@
                 <p class="card-text">Vencimento: <%= obj.vencimento%> </p>
                 <p class="card-text">Cpf: <%= obj.cpf%> </p>
                 <p class="card-text">Informações: <%= obj.descricao%> </p>
-                <p class="card-text">Apelido: <%= obj.apelido%> </p>
                 <div class="d-flex justify-content-between">
-                    <a href="/delete/<%=id%>" title="Este usuário vai para /deletados" class="btn btn-danger btn-sm">Apagar</a>
-                    <a href="/update/<%= id%>" class="btn btn-outline-primary btn-sm" title="Opção de atualizar usuário">Atualizar</a>
+                    <a href="/pagos/delete/<%=id%>" class="btn btn-danger btn-sm">Apagar</a>
                     <a href="javascript:history.back()" class="btn btn-outline-secondary btn-sm">Voltar</a>
-                    <a id="linkVencimento"><button data-vencimento="<%=obj.vencimento%>" title="Usuário vencido: a opção de incluir no serasa é ativada" class="btn btn-outline-secondary btn-sm"></button></a>
+                    <button data-vencimento="<%=obj.vencimento%>" class="btn btn-outline-secondary btn-sm"></button>
                 </div>
             </div>
         </div>
     </div>
     
 <script>
-    var linkVencimento = document.getElementById("linkVencimento")
         function compareDates(date) {
         let parts = date.split('/');
         let today = new Date();
@@ -62,14 +59,13 @@
     function result(data, button) {
         const isVencido = !compareDates(data);
         if (isVencido) {
-            button.textContent = "Vencido - Incluir no Serasa";
+            button.textContent = "Vencido";
             button.classList.remove("btn-outline-secondary");
-            button.classList.add("btn-warning", "btn-sm");
-            linkVencimento.href = "/serasa/incluir/<%=obj.id%>"
+            button.classList.add("btn-warning");
         } else {
             button.textContent = "Não Vencido";
             button.classList.remove("btn-outline-secondary");
-            button.classList.add("btn-success", "btn-sm");
+            button.classList.add("btn-success");
         }
     }
 

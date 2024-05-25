@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página não encontrada</title>
+    <link href="/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f9fa;
+        }
+        .container {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>404 - Página não encontrada</h1>
+        <p>A página que você está tentando acessar <strong><%= url %></strong> não existe.</p>
+        <a href="/" class="btn btn-primary">Voltar para a Página Inicial</a>
+        <a href="javascript:history.back()" class="btn btn-secondary">Voltar</a>
+    </div>
+</body>
+</html>

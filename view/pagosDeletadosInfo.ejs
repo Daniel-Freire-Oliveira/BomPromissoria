@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="/bootstrap.min.css" rel="stylesheet">
+<title>Deletar Informações do Cliente</title>
+<style>
+    .card-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f8f9fa;
+    }
+    .card {
+        width: 350px;
+        border: 1px solid #6c757d;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .card-title {
+        color: #343a40;
+    }
+    .btn-outline-danger {
+        color: #dc3545;
+        border-color: #dc3545;
+    }
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: #fff;
+    }
+    .btn-outline-secondary {
+        color: #6c757d;
+        border-color: #6c757d;
+    }
+    .btn-outline-secondary:hover {
+        background-color: #6c757d;
+        color: #fff;
+    }
+    .btn-outline-warning {
+        color: #ffc107;
+        border-color: #ffc107;
+    }
+    .btn-outline-warning:hover {
+        background-color: #ffc107;
+        color: #fff;
+    }
+    .btn-outline-success {
+        color: #28a745;
+        border-color: #28a745;
+    }
+    .btn-outline-success:hover {
+        background-color: #28a745;
+        color: #fff;
+    }
+</style>
+</head>
+<body>
+    <div class="card-container">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Informações do Cliente nos Pagos Deletados</h5>
+                <p class="card-text">Nome: <%= obj.nome %></p>
+                <p class="card-text">Valor: R$ <%= obj.valor %></p>
+                <p class="card-text">Vencimento: <%= obj.vencimento %></p>
+                <p class="card-text">Cpf: <%= obj.cpf %></p>
+                <p class="card-text">Informações: <%= obj.descricao %></p>
+                <p class="card-text">Apelido: <%= obj.apelido %></p>
+                <div class="d-flex justify-content-between">
+                    <a id="retiradaDaLixeira" href="/pagos/removePermanente/<%= id %>" title="Esta opção remove '<%= obj.nome %>'  permanentemente da lixeira" class="btn btn-outline-danger btn-sm">Remoção permanente</a>
+                    <a href="javascript:history.back()" class="btn btn-outline-secondary btn-sm">Voltar</a>
+                    <button data-vencimento="<%= obj.vencimento %>" title="Vence às <%= obj.vencimento %>" id="vencimento" class="btn btn-outline-secondary btn-sm"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<script>
+    function compareDates(date) {
+        let parts = date.split('/');
+        let today = new Date();
+        date = new Date(parts[2], parts[1] - 1, parts[0]);
+        return date >= today;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const buttons = document.querySelectorAll('[data-vencimento]');
+        buttons.forEach(button => {
+            const dataVencimento = button.getAttribute('data-vencimento');
+            updateButtonStatus(dataVencimento, button);
+        });
+    });
+
+    function updateButtonStatus(data, button) {
+        const isVencido = !compareDates(data);
+        if (isVencido) {
+            button.textContent = "Vencido";
+            button.classList.remove("btn-outline-secondary");
+            button.classList.add("btn-outline-warning");
+        } else {
+            button.textContent = "Não Vencido";
+            button.classList.remove("btn-outline-secondary");
+            button.classList.add("btn-outline-success");
+        }
+    }
+
+    document.getElementById("vencimento").addEventListener("click", () => {
+        window.alert("Vence às <%= obj.vencimento %>");
+    });
+
+    document.getElementById("retiradaDaLixeira").addEventListener("click", () => {
+        window.alert("<%= obj.nome %> Foi deletado com sucesso!");
+    });
+</script>
+</body>
+</html>

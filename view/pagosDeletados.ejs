@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arquivos Deletados</title>
+    <!-- Bootstrap CSS -->
+    <link href="/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .card {
+            margin-top: 20px;
+        }
+        .card-header {
+            background-color: #000000;
+            color: white;
+            text-align: center;
+            font-size: 24px;
+        }
+        .table thead th {
+            background-color: #030303;
+            color: white;
+        }
+        .btn-recover {
+            background-color: #28a745;
+            color: white;
+        }
+        .btn-more-info {
+            background-color: #17a2b8;
+            color: white;
+        }
+        .btn-export {
+            background-color: #007bff;
+            color: white;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+        <div class="container">
+            <a class="navbar-brand" title="Vai para a página inicial ('/')" href="/">Bom Preço</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/logout">Logout <span class="sr-only"></span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pagos">Pagos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/linkDeletados">Deletados</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/serasa">Serasa</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                Arquivos pagos Deletados
+            </div>
+            <div class="card-body">
+              <a id="linkExport" href="/pagos/pagosDeletados/exportar"><button id="export-button" class="btn btn-export">Exportar para XLSX</button></a>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Data de Deleção</th>
+                            <th>CPF</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% obj.forEach((re, index) => { %>
+                            <tr>
+                                <td><%= re.nome %></td>
+                                <td><%= re.dataDel %></td>
+                                <td><%= re.cpf %></td>
+                                <td>
+                                    <a href="/pagos/pagosDeletados/recupera/<%=re.id%>"><button class="btn btn-recover">Recuperar</button>
+                                    <a href="/pagos/pagosDeletados/info/<%=re.id%>"><button class="btn btn-more-info">Mais Info</button></a>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        var buttonExport = document.getElementById("export-button")
+        buttonExport.addEventListener("click",(err)=>{
+            window.alert("Exportado para /pagos/pagosDeletados")
+        })
+    </script>
+</body>
+</html>
